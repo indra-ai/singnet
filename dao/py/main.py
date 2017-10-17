@@ -62,6 +62,7 @@ agentFactoryAbi = parseAbi(json.loads(open('../build/contracts/AgentFactory.json
 marketJobAbi = parseAbi(json.loads(open('../build/contracts/MarketJob.json','r').read()))
 agentAbi = parseAbi(json.loads(open('../build/contracts/Agent.json','r').read()))
 crowdsaleAbi = parseAbi(json.loads(open('../build/contracts/AgiCrowdsale.json','r').read()))
+
 #addresses
 agentRegistryAddress = getAddressByName(json.loads(open('../addresses.json','r').read()),'AgentRegistry')
 agentFactoryAddress = getAddressByName(json.loads(open('../addresses.json','r').read()),'AgentFactory')
@@ -80,8 +81,8 @@ crowdsaleContract = web3.eth.contract(abi = crowdsaleAbi, address=crowdsaleAddre
 def joinNetwork():
   return agentFactoryContract.transact(payload).create()
 
-def advertiseService(service,agent):
-  return agentRegistryContract.transact(payload).addAgent(service,agent)
+def advertiseService(service,unit,pricePerUnit,agent):
+  return agentRegistryContract.transact(payload).addAgent(service,unit,pricePerUnit,agent)
 
 def findServiceProviders(service):
   return agentRegistryContract.call(payload).getAgentsWithService(service)

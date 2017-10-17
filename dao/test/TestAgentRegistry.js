@@ -3,48 +3,33 @@ const AgentRegistry = artifacts.require('registries/AgentRegistry.sol');
 
 contract('AgentRegistry', function (accounts) {
 
-    let registry
+	let registry
 
-    beforeEach(async () => {
-        registry = await AgentRegistry.new()
-    })
+	beforeEach(async () => {
+		registry = await AgentRegistry.new()
+	})
 
-    it('verifies that agent can be added to registry', async () => {
+	it('verifies that agent can be added to registry', async () => {
+		let result = await registry.addAgent(0, 1, 20, accounts[2])
 
-        let result = await registry.addAgent(
-            0,
-            1,
-            20,
-            accounts[2]
-        )
+		assert.equal(result.logs[0].event, 'AgentAdded', 'Agent was not added')
+	})
 
-        assert.equal(result.logs[0].event, 'AgentAdded', 'Agent was not added')
-    })
+	it('returns agent data at 0 position', async () => {
+		await registry.addAgent(0, 1, 20, accounts[2])
 
-    it('returns agent data at 0 position', async () => {
+		let result = await registry.agents.call(0)
 
-        await registry.addAgent(
-            0,
-            1,
-            20,
-            accounts[2]
-        )
+		assert.equal(result, accounts[2], 'invalid agent address')
+	})
 
-        let result = await registry.getAgent.call(0)
-        assert.isNotNull(result)
-    })
+	it('returns agents with service 0', async () => {
+		await registry.addAgent(0, 1, 20, accounts[2])
+		await registry.addAgent(0, 1, 30, accounts[3])
 
-    it('returns agents with service 0', async () => {
+		let result = await registry.getAgentsWithService.call(0)
 
-        await registry.addAgent(
-            0,
-            1,
-            20,
-            accounts[2]
-        )
+		assert.isArray(result)
+	})
 
-        let result = await registry.getAgentsWithService.call(0)
-      assert.isNotNull(result)
-  })
- 
 })

@@ -13,25 +13,23 @@ contract AgentRegistry is AgentRegistryInterface {
 
     mapping (uint => Service[]) services;
 
-    mapping (uint => uint[]) agentsForService;
+    mapping (uint => address[]) agentsForService;
 
-    function getAgentsWithService(uint service) external constant returns (uint[]) {
+    function getAgentsWithService(uint service) external constant returns (address[]) {
         return agentsForService[service];
     }
 
-    function getAgent(uint id) external constant returns (address) {
-        return agents[id];
-    }
+    // function getAgent(uint id) external constant returns (address) {
+    //     return agents[id];
+    // }
 
     function addAgent(uint service, uint unit, uint price, address agent) external {
         // require(services[service].unit == 0 && services[service].pricePerUnit == 0);
         services[service].push(Service(unit, price));
-        
-        uint id = agents.length;
 
         agents.push(agent);
-        agentsForService[service].push(id);
+        agentsForService[service].push(agent);
 
-        AgentAdded(id, agent);
+        AgentAdded(agent, service);
     }
 }

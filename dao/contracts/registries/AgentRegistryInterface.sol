@@ -2,10 +2,10 @@ pragma solidity ^0.4.15;
 
 contract AgentRegistryInterface {
 
-    event AgentAdded(uint id, address agent);
+    event AgentAdded(address agent, uint service);
 
-    function getAgentsWithService(uint service) external constant returns (uint[]);
-    function getAgent(uint id) external constant returns (address);
+    function getAgentsWithService(uint service) external constant returns (address[]);
+    // function getAgent(uint id) external constant returns (address);
     function addAgent(uint service, uint unit, uint price, address agent) external;
 
 }

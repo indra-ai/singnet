@@ -60,17 +60,6 @@ contract AgiCrowdsale is Ownable {
     purchaseTokens(msg.sender);
   }
 
-  // whitelist contirbutors
-  function whitelist(address[] _addresses, bool _status) public onlyOwner {
-    for (uint256 i = 0; i < _addresses.length; i++) {
-        address investorAddress = _addresses[i];
-        if (whitelist[investorAddress] == _status) {
-          continue;
-        }
-        whitelist[investorAddress] = _status;
-    }
-   }
-
   // low level token purchase function
   // caution: tokens must be redeemed by beneficiary address
   function purchaseTokens(address beneficiary) payable {
@@ -127,6 +116,23 @@ contract AgiCrowdsale is Ownable {
     TokenRelease(beneficiary, tokens);
   }
 
+
+  // add to whitelist array of addresses
+  function addWhitelist(address[] _addresses) public onlyOwner {
+    for (uint256 i = 0; i < _addresses.length; i++) {
+        address contributorAddress = _addresses[i];
+        whitelist[contributorAddress] = true;
+    }
+   }
+
+    // remove from whitelist array of addresses 
+   function removeWhitelist(address[] _addresses) public onlyOwner  {
+       for (uint256 i = 0; i < _addresses.length; i++) {
+           address contributorAddress = _addresses[i];
+           whitelist[contributorAddress] = false;
+       }
+   }
+
   // send ether to vault until the sale ends
   function forwardFunds() internal {
     vault.deposit.value(msg.value)(msg.sender);
@@ -181,7 +187,7 @@ contract AgiCrowdsale is Ownable {
 
   function unsoldCleanUp() onlyOwner {
     uint256 amount = token.balanceOf(this);
-    if(amount > 0) {
+    if (amount > 0) {
     require(token.transfer(msg.sender, amount));
     }
 

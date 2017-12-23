@@ -28,17 +28,11 @@ def setup_logging():
                 'level': 'DEBUG',
                 'class': 'logging.FileHandler',
                 'formatter': 'standard',
-                'filename': 'app.log'
+                'filename': '/data/app.log'
             },
         },
 
         'loggers': {
-
-            '': {
-                'handlers': ['console'],
-                'level': 'DEBUG',
-                'propagate': False,
-            },
 
             'sn_agent': {
                 'handlers': ['console'],
@@ -46,7 +40,13 @@ def setup_logging():
                 'propagate': False,
             },
 
-            'demo': {
+            'adapters': {
+                'handlers': ['console'],
+                'level': 'DEBUG',
+                'propagate': False,
+            },
+
+            'examples': {
                 'handlers': ['console'],
                 'level': 'DEBUG',
                 'propagate': False,
